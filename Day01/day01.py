@@ -29,14 +29,8 @@ def first_part(lines):
     """
     frequency = 0
     for value in lines:
-        value = value.rstrip('\n')
-        given_sign = value[0]
-        if given_sign=='-':
-            sign = -1
-        else:
-            sign = 1
-        change = int(value[1:])
-        frequency += sign * change
+        change = int(value.rstrip('\n'))
+        frequency += change
     print('final frequency:', frequency)
     return(frequency)
 
@@ -63,14 +57,8 @@ def second_part(lines):
     found_duplicate = False
     while not found_duplicate:
         for value in lines:
-            value = value.rstrip('\n')
-            given_sign = value[0]
-            if given_sign=='-':
-                sign = -1
-            else:
-                sign = 1
-            change = int(value[1:])
-            frequency += sign * change
+            change = int(value.rstrip('\n'))
+            frequency += change
             if frequency in list_of_freq:
                 print('repeated frequency:', frequency)
                 found_duplicate=True
