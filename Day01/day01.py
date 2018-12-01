@@ -7,6 +7,8 @@ Solution to day 1 for Advent of Code 2018.
 @author: Nino
 """
 
+import itertools
+
 fname = 'input01.txt'
 
 with open(fname) as f:
@@ -25,16 +27,16 @@ def first_part(lines):
     Returns
     -------
     frequency : int
-                Resulting frequency after applying all shanges
+                Resulting frequency after applying all changes
     """
     frequency = 0
     for value in lines:
         change = int(value.rstrip('\n'))
         frequency += change
-    print('final frequency:', frequency)
     return(frequency)
 
 solution1 = first_part(lines)
+print('final frequency:', solution1)
 
 def second_part(lines):
     """
@@ -54,17 +56,15 @@ def second_part(lines):
     """
     list_of_freq =set()
     frequency = 0
-    found_duplicate = False
-    while not found_duplicate:
-        for value in lines:
-            change = int(value.rstrip('\n'))
-            frequency += change
-            if frequency in list_of_freq:
-                print('repeated frequency:', frequency)
-                found_duplicate=True
-                break
-            else:
-                list_of_freq.add(frequency)
-    return frequency
+    frequency_change = itertools.cycle(lines)
+    while True:
+        value = next(frequency_change)
+        change = int(value.rstrip('\n'))
+        frequency += change
+        if frequency in list_of_freq:
+            return frequency
+        else:
+            list_of_freq.add(frequency)
 
 solution2 = second_part(lines)
+print('repeated frequency:', solution2)
