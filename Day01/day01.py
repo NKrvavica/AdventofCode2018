@@ -14,6 +14,7 @@ fname = 'input01.txt'
 with open(fname) as f:
     lines = f.readlines()
 
+
 def first_part(lines):
     """
     Modifies the starting frequency by series of
@@ -35,8 +36,10 @@ def first_part(lines):
         frequency += change
     return(frequency)
 
+
 solution1 = first_part(lines)
 print('final frequency:', solution1)
+
 
 def second_part(lines):
     """
@@ -54,17 +57,16 @@ def second_part(lines):
     frequency : int
                 Frequency which is first repeated
     """
-    list_of_freq =set()
+    list_of_freq = set()
     frequency = 0
-    frequency_change = itertools.cycle(lines)
-    while True:
-        value = next(frequency_change)
+    for value in itertools.cycle(lines):
         change = int(value.rstrip('\n'))
         frequency += change
         if frequency in list_of_freq:
             return frequency
         else:
             list_of_freq.add(frequency)
+
 
 solution2 = second_part(lines)
 print('repeated frequency:', solution2)
