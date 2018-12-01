@@ -72,7 +72,7 @@ def second_part(lines):
             change = int(value[1:])
             frequency += sign * change
             if frequency in list_of_freq:
-                print('repeated frequency', frequency)
+                print('repeated frequency:', frequency)
                 found_duplicate=True
                 break
             else:
