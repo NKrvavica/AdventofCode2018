@@ -12,7 +12,7 @@ import itertools
 fname = 'input01.txt'
 
 with open(fname) as f:
-    lines = f.readlines()
+    lines = f.read().splitlines()
 
 
 def first_part(lines):
@@ -32,14 +32,12 @@ def first_part(lines):
     """
     frequency = 0
     for value in lines:
-        change = int(value.rstrip('\n'))
-        frequency += change
+        frequency += int(value)
     return(frequency)
 
 
 solution1 = first_part(lines)
 print('final frequency:', solution1)
-
 
 def second_part(lines):
     """
@@ -60,8 +58,7 @@ def second_part(lines):
     list_of_freq = set()
     frequency = 0
     for value in itertools.cycle(lines):
-        change = int(value.rstrip('\n'))
-        frequency += change
+        frequency += int(value)
         if frequency in list_of_freq:
             return frequency
         else:
