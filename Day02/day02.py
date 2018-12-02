@@ -8,6 +8,7 @@ Solution to day 2 for Advent of Code 2018.
 """
 
 import itertools
+from collections import Counter
 
 fname = 'input.txt'
 
@@ -19,12 +20,9 @@ def first_part(lines):
     double_letters = 0
     tripple_letters = 0
     for line in lines:
-        count = {}
+        count = Counter()
         for s in line:
-            if s in count:
-                count[s] += 1
-            else:
-                count[s] = 1
+            count[s] += 1
         if 2 in count.values():
             double_letters += 1
         if 3 in count.values():
@@ -33,6 +31,7 @@ def first_part(lines):
 
 
 print('checksum: ', first_part(lines))
+
 
 
 def second_part(lines):
