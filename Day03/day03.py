@@ -14,21 +14,21 @@ with open(fname) as f:
 
 
 def parse_input(line):
-    line_nr, rest = line.split(' @ ')
+    claim_id, rest = line.split(' @ ')
     start, rectangle = rest.split(': ')
     x, y = map(int, start.split(','))
-    rec_x, rec_y = map(int, rectangle.split('x'))
-    return line_nr, x, y, rec_x, rec_y
+    h, w = map(int, rectangle.split('x'))
+    return claim_id, x, y, h, w
 
 
-def cut_fabric(lines):
+def cut_fabric(lines, N=1000):
     claims = {}
-    fabric = np.zeros((1000, 1000))
+    fabric = np.zeros((N, N))
     for line in lines:
-        line_nr, x, y, rec_x, rec_y = parse_input(line)
-        fabric[x:x+rec_x, y:y+rec_y] += 1
-        claims[line_nr] = np.array([[x, x+rec_x],
-                                   [y, y+rec_y]])
+        claim_id, x, y, h, w = parse_input(line)
+        fabric[x:x+h, y:y+w] += 1
+        claims[claim_id] = np.array([[x, x+h],
+                                     [y, y+w]])
     return fabric, claims
 
 
