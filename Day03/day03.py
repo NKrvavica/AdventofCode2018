@@ -13,40 +13,47 @@ fname = 'input.txt'
 with open(fname) as f:
     lines = f.read().splitlines()
 
-all_coord = []
-claims = {}
-for line in lines:
+def cut_fabric(lines):
 
-    # parse instructions
-    line_nr, rest = line.split(' @ ')
-    start, rectangle = rest.split(': ')
-    x, y = map(int, start.split(','))
-    rec_x, rec_y = map(int, rectangle.split('x'))
+    claims = {}
+    fabric = np.zeros((1000, 1000))
 
-    # generate all coordinates per claim
-    coordinates = list(itertools.product(x + np.array(range(rec_x)),
-                                         y + np.array(range(rec_y))))
-    all_coord.extend(coordinates)
+    for line in lines:
 
-    # generate dictionary (key - claims number, values - coordinates)
-    claims[line_nr] = coordinates
+        # parse instructions
+        line_nr, rest = line.split(' @ ')
+        start, rectangle = rest.split(': ')
+        x, y = map(int, start.split(','))
+        rec_x, rec_y = map(int, rectangle.split('x'))
 
-# make 2D array and insert all claims
-fabric = np.zeros((1000, 1000))
-for x, y in all_coord:
-    fabric[x, y] += 1
+        # generate all coordinates per claim
+        coordinates = list(itertools.product(x + np.arange(rec_x),
+                                             y + np.arange(rec_y)))
+
+        # fill fabric with ones as instructed in the claim
+        for x, y in coordinates:
+            fabric[x, y] += 1
+
+        # generate dictionary (key - claims number, values - coordinates)
+        claims[line_nr] = coordinates
+
+    return fabric, claims
+
+fabric, claims = cut_fabric(lines)
 
 # results to the first part
 print(len(fabric[fabric > 1]))
 
 # results to the second part
-for claim_id, coord in claims.items():
-    overlap = False
-    for x, y in coord:
-        if fabric[x, y] != 1:
-            overlap = True
-            break
-    if not overlap:
-        print(claim_id)
-        break
+def second_part(claims):
+    for claim_id, coord in claims.items():
+        overlap = False
+        for x, y in coord:
+            if fabric[x, y] != 1:
+                overlap = True
+                break
+        if not overlap:
+            return claim_id
+
+print(second_part(claims))
 
