@@ -19,7 +19,6 @@ with open(fname) as f:
 def sort_inputs(lines):
     sorted_input = pd.Series()
     for line in lines:
-#        print(line)
         date_str = line[line.find('[')+1:line.find(']')]
         pd_date = datetime.strptime(date_str, '%Y-%m-%d %H:%M')
         sorted_input[pd_date] = line
@@ -39,7 +38,6 @@ def fill_the_records(sorted_input):
         if instruc[19:24] == 'Guard':
             indx += 1
             guard_id = re.findall('\d+', instruc[25:])[0]
-#            records.loc[indx, :]  = 0
             records.loc[indx, 'Date'] = date_time.date()
             records.loc[indx, 'ID'] = int(guard_id)
         elif instruc[19:24] == 'falls':
@@ -59,11 +57,11 @@ def first_part(records):
     max_sleep = 0
     for i in set(records['ID']):
         guard_records = records[records['ID'] == i].iloc[:, 2:]
-        minute_at_sleep = guard_records.values.sum()
-        if minute_at_sleep > max_sleep:
-            max_sleep = minute_at_sleep
+        minute_at_sleep = guard_records.values.sum(axis=0)
+        if minute_at_sleep.sum() > max_sleep:
+            max_sleep = minute_at_sleep.sum()
             guard_id = i
-            minute = np.argmax(guard_records.values.sum(axis=0))
+            minute = np.argmax(minute_at_sleep)
     return guard_id * minute
 
 
