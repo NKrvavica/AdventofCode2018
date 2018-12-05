@@ -6,7 +6,6 @@ Created on Wed Dec  5 07:39:31 2018
 """
 
 import string
-from numba import jit
 
 fname = 'input.txt'
 
@@ -38,7 +37,6 @@ print(len(reacted_polymer))
 
 
 # second part
-@jit
 def second_part(polymer, problematics, reactants):
     shortest = len(polymer)
     for element in problematics:
