@@ -85,12 +85,11 @@ def second_part(req, workers=1, max_duration=10_000):
 
         t += 1
 
-    return timetable, solution
+    return t, solution
 
 
 _, solution = second_part(after.copy(), workers=1, max_duration=2000)
-print('solution to the first part (the hard way way):', ''.join(done))
+print('solution to the first part (the hard way way):', ''.join(solution))
 
-timetable, solution = second_part(after.copy(), workers=5, max_duration=1200)
-print('solution to the second part:',
-      str(np.where(timetable[:, 0] > 0)[0][-1]+1))
+t, solution = second_part(after.copy(), workers=5, max_duration=1200)
+print('solution to the second part:', t)
