@@ -44,14 +44,14 @@ def first_part(req):
 
 
 done = first_part(after.copy())
-print(''.join(done))
+print('solution to the first part (compact way):', ''.join(done))
 
 
-def second_part(req, workers=5, max_duration=1_500):
+def second_part(req, workers=5, max_duration=1000):
     timetable = np.zeros((max_duration, max_duration))
     in_progres = np.zeros(workers)
     processing = set()
-    done = set()
+    done = []
     worker = 0
 
     for t in range(max_duration):
@@ -83,9 +83,12 @@ def second_part(req, workers=5, max_duration=1_500):
             if (timetable[:, worker] == seconds).sum() == seconds:
                 in_progres[worker] = False
                 processing.remove(letter)
-                done.add(letter)
+                done.append(letter)
 
-    return timetable
+    return timetable, done
 
-timetable = second_part(after)
-print(np.where(timetable[:, 0] > 0)[0][-1]+1)
+_, done = second_part(after.copy(), workers=1, max_duration=3000)
+print('solution to the first part (the hard way way):', ''.join(done))
+timetable, done = second_part(after.copy(), workers=5, max_duration=1500)
+print('solution to the second part:',
+      str(np.where(timetable[:, 0] > 0)[0][-1]+1))
