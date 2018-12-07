@@ -47,17 +47,11 @@ done = first_part(after.copy())
 print('solution to the first part (compact way):', ''.join(done))
 
 
-def letter2sec(letter, corr=4):
-    return ord(letter) - corr
-
-
-def sec2letter(seconds, corr=4):
-    return chr(int(seconds) + corr)
-
-
 def second_part(req, workers=1, max_duration=10_000):
     timetable = np.zeros((max_duration, max_duration))
     in_progres = np.zeros(workers)
+    seconds = np.zeros(workers)
+    letter = [''] * workers
     done = set()
     solution = []
     worker, t = 0, 0
@@ -72,24 +66,22 @@ def second_part(req, workers=1, max_duration=10_000):
         for worker in range(workers):
         # if work is in progress, continue in the current time step
             if in_progres[worker]:
-                seconds = timetable[t-1, worker]
-                letter = sec2letter(seconds)
-                timetable[t, worker] = seconds
+                timetable[t, worker] = seconds[worker]
                 in_progres[worker] += 1
         # if work is not in progress, but some jobs are waiting, start them
             elif potential_next_step:
-                letter = sorted(potential_next_step)[0]
-                seconds = letter2sec(letter)
-                timetable[t, worker] = seconds
+                letter[worker] = sorted(potential_next_step)[0]
+                seconds[worker] = ord(letter[worker]) - 4 # A = 61
+                timetable[t, worker] = seconds[worker]
                 in_progres[worker] = 1
-                req.pop(letter)
-                potential_next_step.remove(letter)
+                req.pop(letter[worker])
+                potential_next_step.remove(letter[worker])
 
         # check if the job at the current time step is finished
-            if in_progres[worker] == seconds:
+            if in_progres[worker] == seconds[worker]:
                 in_progres[worker] = 0
-                done.add(letter)
-                solution.append(letter)
+                done.add(letter[worker])
+                solution.append(letter[worker])
 
         t += 1
 
