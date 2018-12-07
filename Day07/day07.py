@@ -27,7 +27,7 @@ for line in lines:
 all_steps = sorted(list(all_steps))
 for step in all_steps:
     if step not in after:
-        after[step]=[]
+        after[step] = []
 
 
 def first_part(req):
@@ -47,48 +47,58 @@ done = first_part(after.copy())
 print('solution to the first part (compact way):', ''.join(done))
 
 
-def second_part(req, workers=5, max_duration=1000):
+def letter2sec(letter, corr=4):
+    return ord(letter) - corr
+
+
+def sec2letter(seconds, corr=4):
+    return chr(int(seconds) + corr)
+
+
+def second_part(req, workers=1, max_duration=10_000):
     timetable = np.zeros((max_duration, max_duration))
     in_progres = np.zeros(workers)
-    processing = set()
-    done = []
-    worker = 0
+    done = set()
+    solution = []
+    worker, t = 0, 0
+    while req or in_progres.any():
 
-    for t in range(max_duration):
-
-        if not req and not in_progres.any():
-            break
-
+        # generate a list of available jobs
         potential_next_step = []
         for key in req:
             if set(req[key]).issubset(done):
                 potential_next_step.append(key)
 
         for worker in range(workers):
-
-            if not in_progres[worker]:
-                if potential_next_step:
-                    letter = sorted(potential_next_step)[0]
-                    processing.add(letter)
-                    req.pop(letter)
-                    seconds = ord(letter) - 4
-                    timetable[t, worker] = seconds
-                    in_progres[worker] = True
-                    potential_next_step.remove(letter)
-            else:
+        # if work is in progress, continue in the current time step
+            if in_progres[worker]:
                 seconds = timetable[t-1, worker]
-                letter = chr(int(seconds) + 4)
+                letter = sec2letter(seconds)
                 timetable[t, worker] = seconds
+                in_progres[worker] += 1
+        # if work is not in progress, but some jobs are waiting, start them
+            elif potential_next_step:
+                letter = sorted(potential_next_step)[0]
+                seconds = letter2sec(letter)
+                timetable[t, worker] = seconds
+                in_progres[worker] = 1
+                req.pop(letter)
+                potential_next_step.remove(letter)
 
-            if (timetable[:, worker] == seconds).sum() == seconds:
-                in_progres[worker] = False
-                processing.remove(letter)
-                done.append(letter)
+        # check if the job at the current time step is finished
+            if in_progres[worker] == seconds:
+                in_progres[worker] = 0
+                done.add(letter)
+                solution.append(letter)
 
-    return timetable, done
+        t += 1
 
-_, done = second_part(after.copy(), workers=1, max_duration=3000)
+    return timetable, solution
+
+
+_, solution = second_part(after.copy(), workers=1, max_duration=2000)
 print('solution to the first part (the hard way way):', ''.join(done))
-timetable, done = second_part(after.copy(), workers=5, max_duration=1500)
+
+timetable, solution = second_part(after.copy(), workers=5, max_duration=1200)
 print('solution to the second part:',
       str(np.where(timetable[:, 0] > 0)[0][-1]+1))
