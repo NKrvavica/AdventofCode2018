@@ -33,25 +33,25 @@ def first_part(lines):
 print('checksum: ', first_part(lines))
 
 
-
 def second_part(lines):
 
     def match(s1, s2):
         """ Checks if two string differ by exactly one character at the same
         position """
-        check = [False, -1]
-        for i in range(len(s1)):
-            if s1[:i] == s2[:i] and s1[i] != s2[i] and s1[i+1:] == s2[i+1:]:
-                check = [True, i]
-                break
-        return check
+        count_diffs = 0
+        for i, (a, b) in enumerate(zip(s1, s2)):
+            if a != b:
+                if count_diffs:
+                    return -1
+                count_diffs += 1
+        return i
 
     """ Compare each string to every other in the list,
     using itertools.combinations"""
     for line1, line2 in itertools.combinations(lines, 2):
         check = match(line1, line2)
-        if check[0]:
-            return line1[:check[1]] + line1[check[1]+1:]
+        if check >= 0:
+            return line1[:check] + line1[check+1:]
 
 
 print('common letters:', second_part(lines))
