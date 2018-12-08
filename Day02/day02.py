@@ -36,8 +36,7 @@ print('checksum: ', first_part(lines))
 def second_part(lines):
 
     def match(s1, s2):
-        """ Checks if two string differ by exactly one character at the same
-        position """
+        """ Checks if two string differ by exactly one character"""
         count_diffs = 0
         for i, (a, b) in enumerate(zip(s1, s2)):
             if a != b:
