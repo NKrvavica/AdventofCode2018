@@ -14,18 +14,17 @@ def play(players, last_marble):
     marble_list = deque([0])
     elfs = itertools.cycle(range(players))
     score = [0] * players
+    rot1, rot2 = -2, +7
 
     for i in range(1, last_marble + 1):
         current_elf = next(elfs)
         if i % 23 == 0:
-            position = -7
-            take_marble = marble_list[position]
+            marble_list.rotate(rot2)
+            take_marble = marble_list.popleft()
             score[current_elf] += i + take_marble
-            marble_list.rotate(-position)
-            marble_list.popleft()
         else:
-            marble_list.rotate(-2)
-            marble_list.insert(0, i)
+            marble_list.rotate(rot1)
+            marble_list.appendleft(i)
 
     return score
 
