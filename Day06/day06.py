@@ -8,7 +8,6 @@ Created on Thu Dec  6 07:11:59 2018
 import itertools
 import numpy as np
 from collections import defaultdict
-import time
 
 fname = 'input.txt'
 loc = np.loadtxt(fname, delimiter=',')
@@ -37,9 +36,6 @@ def find_regions(loc):
     return max_region_1, max_region_size
 
 
-start = time.time()
 a, b = find_regions(loc)
 print('solution to the first part:', a)
 print('solution to the second part:', b)
-end = time.time()
-print(end-start)
