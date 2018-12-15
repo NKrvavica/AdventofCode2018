@@ -14,12 +14,16 @@ before_digits = [int(x) for x in str(INPUT)]
 
 
 def first_part(recepies, pos, INPUT):
+    length = len(recepies)
     while True:
         score = (recepies[pos[0]], recepies[pos[1]])
         suma = score[0] + score[1]
-        digits = [int(x) for x in str(suma)]
-        recepies.extend(digits)
-        length = len(recepies)
+        if suma > 9:
+            length += 1
+            suma -= 10
+            recepies.append(1)
+        length += 1
+        recepies.append(suma)
         pos[0] = (pos[0] + score[0] + 1) % length
         pos[1] = (pos[1] + score[1] + 1) % length
         if length >= INPUT + 10:
@@ -37,19 +41,16 @@ def second_part_faster(recepies, pos, before_digits, INPUT):
     while True:
         score = (recepies[pos[0]], recepies[pos[1]])
         suma = score[0] + score[1]
-        if suma < 10:
+        if suma > 9:
             length += 1
-            recepies.append(suma)
-            if recepies[-len_before:] == before_digits:
-                return length - len_before
-        else:
-            length += 2
+            suma -= 10
             recepies.append(1)
             if recepies[-len_before:] == before_digits:
-                return length - 1 - len_before
-            recepies.append(suma - 10)
-            if recepies[-len_before:] == before_digits:
                 return length - len_before
+        length += 1
+        recepies.append(suma)
+        if recepies[-len_before:] == before_digits:
+            return length - len_before
         pos[0] = (pos[0] + score[0] + 1) % length
         pos[1] = (pos[1] + score[1] + 1) % length
 
