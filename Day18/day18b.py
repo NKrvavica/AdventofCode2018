@@ -12,7 +12,7 @@ fname = 'input.txt'
 N = 50
 
 
-def parse_input(fname, N, T):
+def parse_input(fname, N):
     conversion = {'.': 0, '#': 1, '|': 2}
     with open(fname) as f:
         lines = f.read().splitlines()
@@ -44,13 +44,11 @@ def iterate_in_time(collection_area, T):
 
 
 # First part
-T = 10
-collection_area = parse_input(fname, N, T)
-collection_area = iterate_in_time(collection_area, T)
-print((collection_area == 2).sum().sum() * (collection_area == 1).sum().sum())
+collection_area = parse_input(fname, N)
+collection_area = iterate_in_time(collection_area, 10)
+print((collection_area == 2).sum() * (collection_area == 1).sum())
 
 # Second part (after t=500 results repeat every 28 min)
-T = 1000
-collection_area = parse_input(fname, N, T)
-collection_area = iterate_in_time(collection_area, T)
-print((collection_area == 2).sum().sum() * (collection_area == 1).sum().sum())
+collection_area = parse_input(fname, N)
+collection_area = iterate_in_time(collection_area, 1000)
+print((collection_area == 2).sum() * (collection_area == 1).sum())
